@@ -17,6 +17,51 @@ st.set_page_config(page_title="Churn Predictor", layout="wide")
 
 # Title
 st.title("📊 Customer Churn Prediction")
+
+# ✅ MOBILE HINT - Shows on all devices
+st.markdown("""
+<style>
+    .sidebar-hint {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 14px 20px;
+        border-radius: 12px;
+        margin: 12px 0 20px 0;
+        text-align: center;
+        font-size: 15px;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        animation: pulse 2s infinite;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    .sidebar-hint strong {
+        background: rgba(255,255,255,0.2);
+        padding: 2px 12px;
+        border-radius: 6px;
+        font-size: 20px;
+        margin: 0 4px;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.85; transform: scale(1.01); }
+    }
+    /* On mobile, make it more compact */
+    @media screen and (max-width: 768px) {
+        .sidebar-hint {
+            font-size: 14px;
+            padding: 12px 16px;
+        }
+        .sidebar-hint strong {
+            font-size: 18px;
+        }
+    }
+</style>
+
+<div class="sidebar-hint">
+    👆 Tap <strong>>></strong> in the top-left corner to open input panel
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown("Enter customer details to predict churn risk.")
 
 # Sidebar inputs
@@ -88,7 +133,7 @@ if st.button("🔮 Predict Churn", type="primary"):
     with st.spinner("Analyzing customer data..."):
         input_df = build_input()
         prediction = model.predict(input_df)[0]
-        probability = float(model.predict_proba(input_df)[0][1])  # ✅ Fixed: Convert to float
+        probability = float(model.predict_proba(input_df)[0][1])
 
     col1, col2 = st.columns(2)
     with col1:
@@ -102,7 +147,6 @@ if st.button("🔮 Predict Churn", type="primary"):
     with col2:
         st.metric("Churn Probability", f"{probability:.1%}")
         
-        # ✅ Fixed: Now works with float
         if probability < 0.3:
             st.progress(probability, text=f"🟢 Low Risk - {probability:.1%}")
         elif probability < 0.6:
